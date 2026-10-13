@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>דוח קמפיין - משרד עו"ד הרשמן כץ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Frank+Ruhl+Libre:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+:root{--bg:#F6F5F2;--panel:#FFFFFF;--fg:#1A1A1F;--muted:#6B6B76;--line:#E4E2DC;--grid:#EEECE7;--accent:#7C4DDB;--c1:#2E7DD7;--c2:#16A37F;--bad:#D9483B;--warn:#C98A12;--muted-bar:#C9C6BE;--shadow:0 8px 24px rgba(0,0,0,.08)}
+@media (prefers-color-scheme:dark){:root{--bg:#111114;--panel:#1A1A1F;--fg:#ECEBF0;--muted:#9C9BA6;--line:#2C2C33;--grid:#24242A;--accent:#A07CF0;--c1:#5AA2F0;--c2:#3CC69E;--bad:#F06A5C;--warn:#E7B04A;--muted-bar:#45444C;--shadow:0 8px 24px rgba(0,0,0,.5)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Heebo,system-ui,sans-serif;font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin-inline:auto;padding:32px 16px 48px}
+header{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px}
+.brand{font-size:12px;letter-spacing:.08em;color:var(--accent);font-weight:700}
+h1{font-family:"Frank Ruhl Libre",serif;font-weight:400;font-size:clamp(26px,4vw,36px);margin:6px 0 4px;line-height:1.2}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.take{font-size:17px;line-height:1.7;margin:18px 0 0;max-width:62rem}
+h2{font-size:20px;font-weight:500;margin:40px 0 4px}
+.sec-note{color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.6}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:12px}
+.tile,.card,.insights,.callout{background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.tile{padding:14px 16px}
+.tile .lbl{font-size:12px;color:var(--muted)}
+.tile .val{font-family:"Frank Ruhl Libre",serif;font-size:30px;font-variant-numeric:tabular-nums;margin-top:4px;direction:ltr;text-align:right;line-height:1.15}
+.tile .hint{font-size:12px;color:var(--muted);margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:12px;margin-top:12px}
+.card{padding:20px;min-width:0}
+.card h3,.insights h3,.callout h3{font-size:16px;font-weight:500;margin:0}
+.card .note{color:var(--muted);font-size:12.5px;margin:4px 0 14px;line-height:1.55}
+.chart{position:relative;min-height:240px}
+.chart svg{direction:ltr;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);padding:6px 10px;font-size:12px;white-space:nowrap;opacity:0;direction:rtl;z-index:2}
+.tip .k{color:var(--muted)}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-inline-end:6px;vertical-align:middle}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:500;font-size:12px}
+td.n,th.n{text-align:left;direction:ltr}
+.insights{padding:22px;margin-top:12px}
+.insights ol{margin:10px 0 0;padding-inline-start:1.2rem;line-height:1.75}
+.insights li{margin-bottom:10px}
+.num{font-variant-numeric:tabular-nums;font-weight:500;unicode-bidi:isolate}
+.callout{border-inline-start:4px solid var(--warn);padding:20px 22px;margin:4px 0 16px;line-height:1.7}
+.callout p{margin:8px 0}
+.callout ul{margin:0;padding-inline-start:1.2rem}
+.defs{color:var(--muted);font-size:12.5px;line-height:1.7;margin-top:28px}
+footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.skel{color:transparent!important;background:linear-gradient(90deg,var(--grid),var(--line),var(--grid));background-size:200% 100%;border-radius:6px;animation:sk 1.4s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.err{display:none;background:var(--panel);border:1px solid var(--bad);color:var(--bad);border-radius:12px;padding:14px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">IDEA DIGITAL · דוח ביצועים</div>
+    <h1>דוח קמפיין לידים - משרד עו"ד אברהם הרשמן כץ</h1>
+    <p class="sub">תקופה: <span id="period">—</span> · קמפיין לידים במטא (פייסבוק + אינסטגרם) · עודכן לאחרונה: <span id="updated">—</span></p>
+    <p class="take">
+      מתחילת התקופה הקמפיין הביא <span class="num" data-k="t.leads">—</span> לידים בעלות ממוצעת של <span class="num" data-k="t.cost_per_lead">—</span> לליד. לפי התיעוד של המשרד, <span class="num" data-k="f.meetings">—</span> מהם תועדו כפגישה שנקבעה - עלות של <span class="num" data-k="f.cost_per_meeting">—</span> לפגישה לכל היותר. בגלל שהגיליון לא מתעדכן אחרי השיחה הראשונה, המספרים בפועל כנראה טובים יותר - ועדכון הגיליון הוא הצעד הראשון כדי למדוד את ההחזר האמיתי.
+    </p>
+    <div class="err" id="err">לא הצלחנו לטעון את נתוני הדוח. נסו לרענן את הדף.</div>
+  </header>
+
+  <h2 id="meta">1. ביצועי הקמפיין במטא</h2>
+  <p class="sec-note">הנתונים נמשכים ישירות מחשבון המודעות. "ליד" כאן = טופס לידים שמולא בתוך פייסבוק/אינסטגרם.</p>
+  <div class="tiles">
+    <div class="tile"><div class="lbl">הוצאה</div><div class="val" data-k="t.spend">—</div></div>
+    <div class="tile"><div class="lbl">לידים (מטא)</div><div class="val" data-k="t.leads">—</div></div>
+    <div class="tile"><div class="lbl">עלות לליד</div><div class="val" data-k="t.cost_per_lead">—</div></div>
+    <div class="tile"><div class="lbl">חשיפות</div><div class="val" data-k="t.impressions">—</div><div class="hint">טווח הגעה: <span data-k="t.reach">—</span> · תדירות <span data-k="t.frequency">—</span></div></div>
+    <div class="tile"><div class="lbl">CTR (כל הקליקים)</div><div class="val" data-k="t.ctr">—</div><div class="hint">קליקים: <span data-k="t.clicks">—</span></div></div>
+    <div class="tile"><div class="lbl">CPC</div><div class="val" data-k="t.cpc">—</div><div class="hint">CPM: <span data-k="t.cpm">—</span></div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>לידים לפי שבוע - מטא מול תיעוד המשרד</h3>
+      <p class="note">השוואה בין מה שמטא דיווח לבין מה שנרשם בגיליון הלידים. שבועות מתחילים ביום ראשון.</p>
+      <div class="legend"><span><i style="background:var(--accent)"></i>לידים במטא</span><span><i style="background:var(--c1)"></i>לידים בגיליון</span><span><i style="background:var(--c2)"></i>פגישות שנקבעו</span></div>
+      <div class="chart" id="weekly-chart"></div>
+    </div>
+    <div class="card">
+      <h3>הוצאה יומית ועלות לליד (ממוצע נע 7 ימים)</h3>
+      <p class="note">עמודות = הוצאה יומית. קו = עלות לליד מחושבת על 7 הימים האחרונים, כדי לנטרל ימים בודדים בלי לידים.</p>
+      <div class="legend"><span><i style="background:var(--muted-bar)"></i>הוצאה יומית</span><span><i style="background:var(--accent)"></i>עלות לליד (7 ימים)</span></div>
+      <div class="chart" id="daily-chart"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <h3>סיכום שבועי</h3>
+    <p class="note">כל המדדים המרכזיים לפי שבוע.</p>
+    <div class="tw"><table id="weekly-table">
+      <thead><tr><th data-f="week">שבוע</th><th class="n" data-f="spend">הוצאה</th><th class="n" data-f="impressions">חשיפות</th><th class="n" data-f="ctr">CTR</th><th class="n" data-f="cpc">CPC</th><th class="n" data-f="meta_leads">לידים מטא</th><th class="n" data-f="cpl">עלות לליד</th><th class="n" data-f="sheet_leads">לידים בגיליון</th><th class="n" data-f="meetings">פגישות</th></tr></thead>
+      <tbody></tbody></table></div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <h3>ביצועים לפי מודעה</h3>
+    <p class="note">המודעות הפעילות בקמפיין, כולל מה שקרה ללידים שלהן בפועל לפי הגיליון.</p>
+    <div class="tw"><table id="ads-table">
+      <thead><tr><th data-f="ad">מודעה</th><th class="n" data-f="spend">הוצאה</th><th class="n" data-f="ctr">CTR</th><th class="n" data-f="meta_leads">לידים מטא</th><th class="n" data-f="cost_per_lead">עלות לליד</th><th class="n" data-f="meetings">פגישות</th><th class="n" data-f="meeting_rate">% פגישה</th><th class="n" data-f="cost_per_meeting">עלות לפגישה</th></tr></thead>
+      <tbody></tbody></table></div>
+  </div>
+
+  <h2 id="leads">2. מה קרה ללידים - לפי תיעוד המשרד</h2>
+  <p class="sec-note">הנתונים בסקשן הזה מיובאים מגיליון הלידים שהצוות במשרד מעדכן. כל ליד סווג לפי הערת השיחה האחרונה שנרשמה עליו. פרטים אישיים של פונים לא מוצגים בדוח.</p>
+  <div class="callout">
+    <h3>חשוב: הדוח טוב בדיוק כמו העדכון של הגיליון</h3>
+    <p>הנתונים בסקשן הזה מבוססים רק על מה שנרשם בגיליון. כרגע ברוב הלידים מתועדת רק השיחה הראשונה, ואחרי שהפונה חוזר, עונה או מגיע לפגישה - הגיליון לא מתעדכן. המשמעות:</p>
+    <ul>
+      <li><b>מספר הפגישות בפועל כנראה גבוה יותר</b> ממה שמוצג כאן, והעלות האמיתית לפגישה נמוכה יותר.</li>
+      <li><b>חלק מהלידים שמסומנים "אין מענה" נענו בהמשך</b> ולא עודכנו.</li>
+      <li><b>אין לנו דרך לדעת כמה פגישות הפכו ללקוחות משלמים</b> - הנתון הכי חשוב למדידת החזר ההשקעה בקמפיין.</li>
+    </ul>
+    <p>בלי המידע הזה, ההחלטות על התקציב (איזו מודעה, איזו פלטפורמה, כמה להשקיע) מתקבלות על תמונה חלקית. <b>הבקשה שלנו:</b> לעדכן את עמודת "סטטוס" בכל ליד אחרי כל שינוי - ענה / נקבעה פגישה / הגיע לפגישה / נסגר כלקוח / לא רלוונטי. שתי דקות ביום, והדוח יתחיל להראות את ההחזר האמיתי של הקמפיין.</p>
+  </div>
+  <div class="tiles">
+    <div class="tile"><div class="lbl">לידים בגיליון</div><div class="val" data-k="f.sheet_leads">—</div><div class="hint">מתוכם כפולים: <span data-k="f.dups">—</span></div></div>
+    <div class="tile"><div class="lbl">פגישות שתועדו</div><div class="val" data-k="f.meetings">—</div></div>
+    <div class="tile"><div class="lbl">שיעור קביעת פגישה</div><div class="val" data-k="f.meeting_rate">—</div><div class="hint">מכלל הלידים בגיליון</div></div>
+    <div class="tile"><div class="lbl">עלות לפגישה</div><div class="val" data-k="f.cost_per_meeting">—</div><div class="hint">לכל היותר</div></div>
+    <div class="tile"><div class="lbl">עדיין בתהליך</div><div class="val" data-k="f.in_progress">—</div><div class="hint">שיחה רלוונטית / ביקשו שיחזרו</div></div>
+    <div class="tile"><div class="lbl">אין מענה (בתיעוד)</div><div class="val" data-k="f.noanswer">—</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>סטטוס הלידים</h3>
+      <p class="note">לאן הגיע כל ליד שנכנס בתקופה, לפי ההערה האחרונה בגיליון.</p>
+      <div class="chart" id="outcome-chart" style="min-height:260px"></div>
+    </div>
+    <div class="card">
+      <h3>לפי מצב החוב (שאלת הסינון בטופס)</h3>
+      <p class="note">מי ממלא את הטופס ומי מגיע לפגישה.</p>
+      <div class="tw"><table id="debt-table">
+        <thead><tr><th data-f="debt_status">מצב החוב</th><th class="n" data-f="leads">לידים</th><th class="n" data-f="meetings">פגישות</th><th class="n" data-f="meeting_rate">% פגישה</th><th class="n" data-f="noanswer">אין מענה</th></tr></thead>
+        <tbody></tbody></table></div>
+      <h3 style="margin-top:22px">לפי פלטפורמה</h3>
+      <div class="tw" style="margin-top:8px"><table id="source-table">
+        <thead><tr><th data-f="source">פלטפורמה</th><th class="n" data-f="leads">לידים</th><th class="n" data-f="meetings">פגישות</th><th class="n" data-f="meeting_rate">% פגישה</th><th class="n" data-f="noanswer">אין מענה</th></tr></thead>
+        <tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="insights">
+    <h3>מה הנתונים אומרים</h3>
+    <ol id="insights-list">
+      <li><b>הקמפיין מספק נפח יציב.</b> מטא דיווחה על <span class="num" data-k="t.leads">—</span> לידים והגיליון מתעד <span class="num" data-k="f.sheet_leads">—</span> - כמעט אחד לאחד, כלומר הלידים עוברים מהטופס לגיליון בלי איבוד.</li>
+      <li><b>מהירות החזרה ללידים היא המנוף הזול ביותר.</b> <span class="num" data-k="f.noanswer">—</span> לידים (<span class="num" data-k="f.noanswer_share">—</span>) מסומנים "אין מענה" בהערה האחרונה - חלקם כנראה נענו בהמשך ולא עודכנו, אבל גם כך זה הסטטוס הנפוץ ביותר. לפי תאריכי ההערות, השיחה הראשונה מתבצעת בדרך כלל למחרת או יומיים אחרי השארת הפרטים. בתחום חובות והוצאה לפועל, פונה שלא קיבל מענה באותו יום ממשיך לחפש - ולכן חזרה תוך שעה, ניסיון שני באותו יום והודעת וואטסאפ אוטומטית הם הדרך הזולה ביותר להעלות את מספר הפגישות בלי להגדיל תקציב.</li>
+      <li><b>כשמגיעים ללקוח, ההמרה טובה.</b> <span class="num" data-k="f.meetings">—</span> פגישות תועדו ועוד <span class="num" data-k="f.in_progress">—</span> לידים נמצאים בשיחה פעילה או ביקשו שיחזרו אליהם. מתוך מי שהצליחו לדבר איתו, <span class="num" data-k="f.meeting_rate_reached">—</span> הגיעו לקביעת פגישה.</li>
+      <li id="ins-source"><b>פייסבוק מול אינסטגרם.</b> שיעור קביעת פגישה בפייסבוק <span class="num" data-k="s.Facebook">—</span> מול <span class="num" data-k="s.Instagram">—</span> באינסטגרם. <span id="ins-source-verdict"></span></li>
+      <li id="ins-ads"><b>השוואת המודעות.</b> <span id="ins-ads-text"></span></li>
+      <li><b>בקשה לצוות:</b> עמודות "האם טופל?" ו"סטטוס" בגיליון ריקות מאז ספטמבר, והסיווג בדוח נעשה מתוך הערת השיחה הראשונה בלבד. עדכון הסטטוס אחרי כל שינוי (ראו ההסבר בתחילת הסקשן) יאפשר לנו למדוד פגישות שהתקיימו ולקוחות שנסגרו - ולהעביר תקציב למה שבאמת מביא לקוחות.</li>
+    </ol>
+  </div>
+
+  <p class="defs"><b>הגדרות:</b> CTR = אחוז הקליקים מתוך החשיפות. CPC = עלות לקליק. CPM = עלות לאלף חשיפות. עלות לליד = הוצאה ÷ לידים במטא. עלות לפגישה = הוצאה ÷ פגישות שתועדו בגיליון. "שיחה רלוונטית - בתהליך" = דיברו עם הפונה, הוא רלוונטי אבל טרם נקבעה פגישה. "טרם תועד" = לידים מהימים האחרונים שעוד אין עליהם הערה.</p>
+
+  <footer><span>הוכן על ידי IDEA DIGITAL</span><span>הדוח מתעדכן אוטומטית פעם בשבוע</span></footer>
+</div>
+
+<script>
+(async function () {
+  const ILS = (v) => '₪' + d3.format(',.0f')(v);
+  const ILS2 = (v) => '₪' + d3.format(',.2f')(v);
+  const INT = d3.format(',');
+  const PCT = d3.format('.1%');
+  const DASH = (f) => (v) => (v == null || Number.isNaN(v)) ? '—' : f(v);
+  const parseDay = (s) => new Date(s + 'T00:00:00Z');
+  const wk = (s) => d3.utcFormat('%Y-%m-%d')(d3.utcSunday.floor(parseDay(s)));
+  const ddmm = d3.utcFormat('%d.%m');
+  const FMT = {
+    spend: ILS, cost_per_lead: DASH(ILS2), cpc: DASH(ILS2), cpm: ILS2, cpl: DASH(ILS2), cost_per_meeting: DASH(ILS),
+    impressions: INT, reach: INT, clicks: INT, leads: INT, meetings: INT, sheet_leads: INT, noanswer: INT, dups: INT, in_progress: INT, meta_leads: INT,
+    frequency: d3.format('.2f'), ctr: (v) => v > 1 ? d3.format('.2f')(v) + '%' : PCT(v),
+    meeting_rate: DASH(PCT), noanswer_share: PCT, meeting_rate_reached: PCT,
+    week: (s) => 'מ-' + ddmm(parseDay(s)),
+  };
+  document.querySelectorAll('[data-k],.chart').forEach((e) => e.classList.add('skel'));
+
+  let meta, totals, ads, leads, info;
+  try {
+    const bust = '?v=' + Date.now();
+    const get = (p) => fetch('data/' + p + bust).then((r) => { if (!r.ok) throw new Error(p); return r.json(); });
+    [totals, meta, ads, leads, info] = await Promise.all([get('meta_totals.json'), get('meta_daily.json'), get('meta_ads.json'), get('leads.json'), get('info.json').catch(() => ({}))]);
+  } catch (e) {
+    document.getElementById('err').style.display = 'block';
+    document.querySelectorAll('.skel').forEach((e) => e.classList.remove('skel'));
+    return;
+  }
+  const t = totals[0];
+  const days = meta.map((r) => r.day).sort();
+  const fmtFull = d3.utcFormat('%d.%m.%Y');
+  document.getElementById('period').textContent = fmtFull(parseDay(days[0])) + ' - ' + fmtFull(parseDay(days[days.length - 1]));
+  document.getElementById('updated').textContent = info.updated ? fmtFull(new Date(info.updated)) : fmtFull(parseDay(days[days.length - 1]));
+
+  // ---- calculations ----
+  const c = (k, rows = leads) => rows.filter((r) => r.outcome_code === k).length;
+  const n = leads.length, meetings = c('meeting'), noanswer = c('noanswer');
+  const reached = meetings + c('qualified') + c('callback') + c('notrel');
+  const f = {
+    sheet_leads: n, meetings, noanswer, dups: c('dup'), in_progress: c('qualified') + c('callback'),
+    meeting_rate: meetings / n, noanswer_share: noanswer / n, meeting_rate_reached: reached ? meetings / reached : null,
+    cost_per_meeting: meetings ? t.spend / meetings : null,
+  };
+  const group = (key) => d3.rollups(leads, (v) => {
+    const m = c('meeting', v);
+    return { leads: v.length, meetings: m, meeting_rate: m / v.length, noanswer: c('noanswer', v) };
+  }, (r) => r[key]).map(([k, o]) => ({ [key]: k, ...o })).sort((a, b) => b.leads - a.leads);
+  const bySource = group('source'), byDebt = group('debt_status');
+  const outcomes = d3.rollups(leads, (v) => ({ n: v.length, order: v[0].outcome_order }), (r) => r.outcome)
+    .map(([outcome, o]) => ({ outcome, n: o.n, share: o.n / n, order: o.order })).sort((a, b) => a.order - b.order);
+  const mW = d3.rollup(meta, (v) => ({ spend: d3.sum(v, (r) => r.spend), impressions: d3.sum(v, (r) => r.impressions), clicks: d3.sum(v, (r) => r.clicks), leads: d3.sum(v, (r) => r.leads) }), (r) => wk(r.day));
+  const sW = d3.rollup(leads, (v) => ({ n: v.length, meet: c('meeting', v) }), (r) => wk(r.day));
+  const weekly = [...mW.keys()].sort().map((week) => {
+    const a = mW.get(week), b = sW.get(week) || { n: 0, meet: 0 };
+    return { week, spend: a.spend, impressions: a.impressions, ctr: a.clicks / a.impressions, cpc: a.clicks ? a.spend / a.clicks : null, meta_leads: a.leads, cpl: a.leads ? a.spend / a.leads : null, sheet_leads: b.n, meetings: b.meet };
+  });
+  const sorted = [...meta].sort((a, b) => d3.ascending(a.day, b.day));
+  const daily = sorted.map((r, i) => {
+    const w = sorted.slice(Math.max(0, i - 6), i + 1); const l = d3.sum(w, (x) => x.leads);
+    return { day: r.day, spend: r.spend, leads: r.leads, cpl7: i >= 6 && l ? d3.sum(w, (x) => x.spend) / l : null };
+  });
+  const byAd = ads.map((a) => {
+    const mine = leads.filter((r) => r.ad === a.ad); const m = c('meeting', mine);
+    return { ad: a.ad, spend: a.spend, ctr: a.ctr / 100, meta_leads: a.leads, cost_per_lead: a.cost_per_lead, meetings: m, meeting_rate: mine.length ? m / mine.length : null, cost_per_meeting: m ? a.spend / m : null };
+  }).sort((a, b) => b.spend - a.spend);
+
+  // ---- fill numbers ----
+  const src = { t, f, s: Object.fromEntries(bySource.map((r) => [r.source, r.meeting_rate])) };
+  document.querySelectorAll('[data-k]').forEach((el) => {
+    const [g, k] = el.dataset.k.split('.');
+    const v = src[g][k];
+    el.textContent = v == null ? '—' : (g === 's' ? PCT(v) : (FMT[k] || String)(v));
+    el.classList.remove('skel');
+  });
+  const fb = src.s.Facebook, ig = src.s.Instagram;
+  document.getElementById('ins-source-verdict').textContent = (fb == null || ig == null) ? '' :
+    Math.abs(fb - ig) < 0.03 ? 'ההבדל קטן - שתי הפלטפורמות ממירות בצורה דומה.' :
+    (fb > ig ? 'פייסבוק ממיר טוב יותר. אם המגמה תימשך, נשקול להעביר אליו חלק מהתקציב.' : 'אינסטגרם ממיר טוב יותר. אם המגמה תימשך, נשקול להעביר אליו חלק מהתקציב.');
+  const withM = byAd.filter((a) => a.cost_per_meeting != null);
+  let adText = 'אין עדיין מספיק פגישות מתועדות כדי להשוות בין המודעות.';
+  if (withM.length >= 2) {
+    const [a, b] = [...withM].sort((x, y) => x.cost_per_meeting - y.cost_per_meeting);
+    const gap = (b.cost_per_meeting - a.cost_per_meeting) / b.cost_per_meeting;
+    adText = `עלות לפגישה של ${ILS(a.cost_per_meeting)} במודעת "${a.ad}" מול ${ILS(b.cost_per_meeting)} במודעת "${b.ad}". ` +
+      (gap < 0.15 ? 'ההפרש קטן מכדי להכריע - הצעד הבא הוא להוסיף קריאייטיב חדש לבדיקה.' : `"${a.ad}" יעילה יותר - נשקול להעביר אליה תקציב.`);
+  }
+  document.getElementById('ins-ads-text').textContent = adText;
+
+  // ---- tables ----
+  const fillTable = (id, rows) => {
+    const tbl = document.getElementById(id);
+    const cols = [...tbl.querySelectorAll('th')].map((th) => th.dataset.f);
+    tbl.querySelector('tbody').replaceChildren(...rows.map((r) => {
+      const tr = document.createElement('tr');
+      cols.forEach((col, i) => { const td = document.createElement('td'); if (i) td.className = 'n'; const v = r[col]; td.textContent = FMT[col] ? FMT[col](v) : v; tr.append(td); });
+      return tr;
+    }));
+  };
+  fillTable('weekly-table', weekly); fillTable('ads-table', byAd); fillTable('debt-table', byDebt); fillTable('source-table', bySource);
+
+  // ---- charts ----
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const styleAxis = (g) => { g.attr('font-size', null).attr('font-family', null); g.selectAll('text').attr('fill', css('--muted')).style('font-size', '11px'); g.selectAll('.domain').attr('stroke', css('--line')); g.selectAll('.tick line').attr('stroke', css('--grid')); };
+  const tipFor = (box) => {
+    let tip = box.querySelector('.tip'); if (!tip) { tip = document.createElement('div'); tip.className = 'tip'; box.append(tip); }
+    return {
+      show(ev, lines) {
+        tip.replaceChildren(...lines.map(([k, v], i) => { const d = document.createElement('div'); if (!i) { d.className = 'k'; d.textContent = k; } else d.textContent = k + ': ' + v; return d; }));
+        const r = box.getBoundingClientRect(); let x = ev.clientX - r.left + 12; tip.style.opacity = 1;
+        if (x + tip.offsetWidth > box.clientWidth) x = ev.clientX - r.left - tip.offsetWidth - 12;
+        tip.style.left = Math.max(0, x) + 'px'; tip.style.top = (ev.clientY - r.top + 12) + 'px';
+      },
+      hide() { tip.style.opacity = 0; },
+    };
+  };
+  function weeklyChart() {
+    const box = document.getElementById('weekly-chart'); box.querySelector('svg')?.remove();
+    const W = box.clientWidth, H = 240, m = { t: 10, r: 8, b: 26, l: 30 };
+    const keys = ['meta_leads', 'sheet_leads', 'meetings'], names = ['לידים במטא', 'לידים בגיליון', 'פגישות'], cols = [css('--accent'), css('--c1'), css('--c2')];
+    const x0 = d3.scaleBand(weekly.map((r) => r.week), [m.l, W - m.r]).paddingInner(0.25);
+    const x1 = d3.scaleBand(keys, [0, x0.bandwidth()]).padding(0.1);
+    const y = d3.scaleLinear([0, d3.max(weekly, (r) => Math.max(r.meta_leads, r.sheet_leads)) * 1.1 || 1], [H - m.b, m.t]).nice();
+    const svg = d3.select(box).insert('svg', ':first-child').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(-(W - m.l - m.r))).call(styleAxis).call((g) => g.select('.domain').remove());
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x0).tickFormat((s) => ddmm(parseDay(s))).tickSize(0).tickPadding(8)).call(styleAxis);
+    const tip = tipFor(box);
+    svg.append('g').selectAll('g').data(weekly).join('g').attr('transform', (r) => `translate(${x0(r.week)},0)`)
+      .selectAll('rect').data((r) => keys.map((k, i) => ({ r, k, i }))).join('rect')
+      .attr('x', (o) => x1(o.k)).attr('width', x1.bandwidth()).attr('y', (o) => y(o.r[o.k])).attr('height', (o) => y(0) - y(o.r[o.k])).attr('rx', 3).attr('fill', (o) => cols[o.i])
+      .on('mousemove', (ev, o) => tip.show(ev, [['שבוע ' + FMT.week(o.r.week)], ...keys.map((k, i) => [names[i], o.r[k]])])).on('mouseleave', tip.hide);
+  }
+  function dailyChart() {
+    const box = document.getElementById('daily-chart'); box.querySelector('svg')?.remove();
+    const W = box.clientWidth, H = 240, m = { t: 10, r: 44, b: 26, l: 44 };
+    const x = d3.scaleBand(daily.map((r) => r.day), [m.l, W - m.r]).padding(0.25);
+    const y = d3.scaleLinear([0, d3.max(daily, (r) => r.spend) * 1.1], [H - m.b, m.t]).nice();
+    const y2 = d3.scaleLinear([0, d3.max(daily, (r) => r.cpl7 || 0) * 1.15 || 1], [H - m.b, m.t]).nice();
+    const svg = d3.select(box).insert('svg', ':first-child').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickFormat((v) => '₪' + v).tickSize(-(W - m.l - m.r))).call(styleAxis).call((g) => g.select('.domain').remove());
+    svg.append('g').attr('transform', `translate(${W - m.r},0)`).call(d3.axisRight(y2).ticks(4).tickFormat((v) => '₪' + v).tickSize(0).tickPadding(6)).call(styleAxis).call((g) => g.select('.domain').remove());
+    const step = Math.ceil(daily.length / Math.max(2, Math.floor((W - m.l - m.r) / 60)));
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(daily.filter((_, i) => i % step === 0).map((r) => r.day)).tickFormat((s) => ddmm(parseDay(s))).tickSize(0).tickPadding(8)).call(styleAxis);
+    const tip = tipFor(box);
+    svg.append('g').selectAll('rect').data(daily).join('rect').attr('x', (r) => x(r.day)).attr('width', x.bandwidth()).attr('y', (r) => y(r.spend)).attr('height', (r) => y(0) - y(r.spend)).attr('rx', 2).attr('fill', css('--muted-bar'))
+      .on('mousemove', (ev, r) => tip.show(ev, [[fmtFull(parseDay(r.day))], ['הוצאה', ILS2(r.spend)], ['לידים', r.leads], ['עלות לליד (7 ימים)', r.cpl7 == null ? '—' : ILS2(r.cpl7)]])).on('mouseleave', tip.hide);
+    svg.append('path').datum(daily).attr('d', d3.line().defined((r) => r.cpl7 != null).x((r) => x(r.day) + x.bandwidth() / 2).y((r) => y2(r.cpl7)))
+      .attr('fill', 'none').attr('stroke', css('--accent')).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('pointer-events', 'none');
+  }
+  function outcomeChart() {
+    const box = document.getElementById('outcome-chart'); box.replaceChildren();
+    const max = d3.max(outcomes, (r) => r.n);
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center;font-size:13px';
+    const colorOf = (o) => o === 'נקבעה פגישה' ? 'var(--c2)' : (o === 'אין מענה' ? 'var(--bad)' : 'var(--muted-bar)');
+    outcomes.forEach((r) => {
+      const l = document.createElement('div'); l.textContent = r.outcome;
+      const bw = document.createElement('div'); const b = document.createElement('div');
+      b.style.cssText = `height:18px;border-radius:4px;width:${(r.n / max) * 100}%;background:${colorOf(r.outcome)}`; bw.append(b);
+      const v = document.createElement('div'); v.style.cssText = 'font-variant-numeric:tabular-nums;direction:ltr;text-align:left;color:var(--muted)'; v.textContent = r.n + ' · ' + PCT(r.share);
+      wrap.append(l, bw, v);
+    });
+    box.append(wrap);
+  }
+  const draw = () => { document.querySelectorAll('.chart').forEach((e) => e.classList.remove('skel')); weeklyChart(); dailyChart(); outcomeChart(); };
+  draw();
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 150); });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', draw);
+})();
+</script>
+</body>
+</html>
