@@ -10,16 +10,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Frank+Ruhl+Libre:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <style>
-:root{--bg:#F6F5F2;--panel:#FFFFFF;--fg:#1A1A1F;--muted:#6B6B76;--line:#E4E2DC;--grid:#EEECE7;--accent:#7C4DDB;--c1:#2E7DD7;--c2:#16A37F;--bad:#D9483B;--warn:#C98A12;--muted-bar:#C9C6BE;--shadow:0 8px 24px rgba(0,0,0,.08)}
-@media (prefers-color-scheme:dark){:root{--bg:#111114;--panel:#1A1A1F;--fg:#ECEBF0;--muted:#9C9BA6;--line:#2C2C33;--grid:#24242A;--accent:#A07CF0;--c1:#5AA2F0;--c2:#3CC69E;--bad:#F06A5C;--warn:#E7B04A;--muted-bar:#45444C;--shadow:0 8px 24px rgba(0,0,0,.5)}}
+:root{--bg:#F6F5F2;--panel:#FFFFFF;--fg:#1A1A1F;--muted:#6B6B76;--line:#E4E2DC;--grid:#EEECE7;--accent:#7C4DDB;--c1:#2E7DD7;--c2:#16A37F;--bad:#D9483B;--good:#16A37F;--warn:#C98A12;--muted-bar:#C9C6BE;--shadow:0 8px 24px rgba(0,0,0,.08)}
+@media (prefers-color-scheme:dark){:root{--bg:#111114;--panel:#1A1A1F;--fg:#ECEBF0;--muted:#9C9BA6;--line:#2C2C33;--grid:#24242A;--accent:#A07CF0;--c1:#5AA2F0;--c2:#3CC69E;--bad:#F06A5C;--good:#3CC69E;--warn:#E7B04A;--muted-bar:#45444C;--shadow:0 8px 24px rgba(0,0,0,.5)}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:Heebo,system-ui,sans-serif;font-size:15px;line-height:1.55}
 .wrap{max-width:1180px;margin-inline:auto;padding:32px 16px 48px}
-header{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px}
+header{padding-bottom:6px}
 .brand{font-size:12px;letter-spacing:.08em;color:var(--accent);font-weight:700}
 h1{font-family:"Frank Ruhl Libre",serif;font-weight:400;font-size:clamp(26px,4vw,36px);margin:6px 0 4px;line-height:1.2}
 .sub{color:var(--muted);font-size:13px;margin:0}
 .take{font-size:17px;line-height:1.7;margin:18px 0 0;max-width:62rem}
+.viewbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:18px -16px 22px;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.viewbar .vl{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:6px 14px;cursor:pointer;line-height:1.3}
+.tabs button small{color:var(--muted);font-size:11.5px;margin-inline-start:4px}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tabs button[aria-selected="true"] small{color:inherit;opacity:.75}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 h2{font-size:20px;font-weight:500;margin:40px 0 4px}
 .sec-note{color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.6}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:12px}
@@ -28,6 +36,10 @@ h2{font-size:20px;font-weight:500;margin:40px 0 4px}
 .tile .lbl{font-size:12px;color:var(--muted)}
 .tile .val{font-family:"Frank Ruhl Libre",serif;font-size:30px;font-variant-numeric:tabular-nums;margin-top:4px;direction:ltr;text-align:right;line-height:1.15}
 .tile .hint{font-size:12px;color:var(--muted);margin-top:4px}
+.delta{font-size:12px;margin-top:4px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.delta:empty{display:none}
+.up-good,.down-good{color:var(--good)}
+.up-bad,.down-bad{color:var(--bad)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:12px;margin-top:12px}
 .card{padding:20px;min-width:0}
 .card h3,.insights h3,.callout h3{font-size:16px;font-weight:500;margin:0}
@@ -43,6 +55,8 @@ table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:ta
 th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
 th{color:var(--muted);font-weight:500;font-size:12px}
 td.n,th.n{text-align:left;direction:ltr}
+#cmp-card{margin-top:12px}
+#cmp-table td:first-child{color:var(--fg)}
 .insights{padding:22px;margin-top:12px}
 .insights ol{margin:10px 0 0;padding-inline-start:1.2rem;line-height:1.75}
 .insights li{margin-bottom:10px}
@@ -64,20 +78,33 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
     <h1>דוח קמפיין לידים - משרד עו"ד אברהם הרשמן כץ</h1>
     <p class="sub">תקופה: <span id="period">—</span> · קמפיין לידים במטא (פייסבוק + אינסטגרם) · עודכן לאחרונה: <span id="updated">—</span></p>
     <p class="take">
-      מתחילת התקופה הקמפיין הביא <span class="num" data-k="t.leads">—</span> לידים בעלות ממוצעת של <span class="num" data-k="t.cost_per_lead">—</span> לליד. לפי התיעוד של המשרד, <span class="num" data-k="f.meetings">—</span> מהם תועדו כפגישה שנקבעה - עלות של <span class="num" data-k="f.cost_per_meeting">—</span> לפגישה לכל היותר. בגלל שהגיליון לא מתעדכן אחרי השיחה הראשונה, המספרים בפועל כנראה טובים יותר - ועדכון הגיליון הוא הצעד הראשון כדי למדוד את ההחזר האמיתי.
+      <span id="take-when">—</span> הקמפיין הביא <span class="num" data-k="t.leads">—</span> לידים בעלות ממוצעת של <span class="num" data-k="t.cost_per_lead">—</span> לליד. לפי התיעוד של המשרד, <span class="num" data-k="f.meetings">—</span> מהם תועדו כפגישה שנקבעה - עלות של <span class="num" data-k="f.cost_per_meeting">—</span> לפגישה לכל היותר. <span id="take-cmp"></span>בגלל שהגיליון לא מתעדכן אחרי השיחה הראשונה, המספרים בפועל כנראה טובים יותר - ועדכון הגיליון הוא הצעד הראשון כדי למדוד את ההחזר האמיתי.
     </p>
     <div class="err" id="err">לא הצלחנו לטעון את נתוני הדוח. נסו לרענן את הדף.</div>
   </header>
 
+  <nav class="viewbar" aria-label="בחירת תקופה">
+    <span class="vl">תצוגה:</span>
+    <div class="tabs" id="tabs" role="tablist"></div>
+  </nav>
+
+  <div class="card" id="cmp-card" hidden>
+    <h3 id="cmp-title">השוואה לחודש הקודם</h3>
+    <p class="note" id="cmp-note"></p>
+    <div class="tw"><table id="cmp-table">
+      <thead><tr><th>מדד</th><th class="n" id="cmp-h-cur">החודש</th><th class="n" id="cmp-h-prev">החודש הקודם</th><th class="n">שינוי</th></tr></thead>
+      <tbody></tbody></table></div>
+  </div>
+
   <h2 id="meta">1. ביצועי הקמפיין במטא</h2>
   <p class="sec-note">הנתונים נמשכים ישירות מחשבון המודעות. "ליד" כאן = טופס לידים שמולא בתוך פייסבוק/אינסטגרם.</p>
   <div class="tiles">
-    <div class="tile"><div class="lbl">הוצאה</div><div class="val" data-k="t.spend">—</div></div>
-    <div class="tile"><div class="lbl">לידים (מטא)</div><div class="val" data-k="t.leads">—</div></div>
-    <div class="tile"><div class="lbl">עלות לליד</div><div class="val" data-k="t.cost_per_lead">—</div></div>
+    <div class="tile"><div class="lbl">הוצאה</div><div class="val" data-k="t.spend">—</div><div class="delta" data-d="spend"></div></div>
+    <div class="tile"><div class="lbl">לידים (מטא)</div><div class="val" data-k="t.leads">—</div><div class="delta" data-d="leads"></div></div>
+    <div class="tile"><div class="lbl">עלות לליד</div><div class="val" data-k="t.cost_per_lead">—</div><div class="delta" data-d="cpl"></div></div>
     <div class="tile"><div class="lbl">חשיפות</div><div class="val" data-k="t.impressions">—</div><div class="hint">טווח הגעה: <span data-k="t.reach">—</span> · תדירות <span data-k="t.frequency">—</span></div></div>
-    <div class="tile"><div class="lbl">CTR (כל הקליקים)</div><div class="val" data-k="t.ctr">—</div><div class="hint">קליקים: <span data-k="t.clicks">—</span></div></div>
-    <div class="tile"><div class="lbl">CPC</div><div class="val" data-k="t.cpc">—</div><div class="hint">CPM: <span data-k="t.cpm">—</span></div></div>
+    <div class="tile"><div class="lbl">CTR (כל הקליקים)</div><div class="val" data-k="t.ctr">—</div><div class="hint">קליקים: <span data-k="t.clicks">—</span></div><div class="delta" data-d="ctr"></div></div>
+    <div class="tile"><div class="lbl">CPC</div><div class="val" data-k="t.cpc">—</div><div class="hint">CPM: <span data-k="t.cpm">—</span></div><div class="delta" data-d="cpc"></div></div>
   </div>
 
   <div class="grid">
@@ -97,7 +124,7 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
 
   <div class="card" style="margin-top:12px">
     <h3>סיכום שבועי</h3>
-    <p class="note">כל המדדים המרכזיים לפי שבוע.</p>
+    <p class="note">כל המדדים המרכזיים לפי שבוע, בתוך התקופה שנבחרה.</p>
     <div class="tw"><table id="weekly-table">
       <thead><tr><th data-f="week">שבוע</th><th class="n" data-f="spend">הוצאה</th><th class="n" data-f="impressions">חשיפות</th><th class="n" data-f="ctr">CTR</th><th class="n" data-f="cpc">CPC</th><th class="n" data-f="meta_leads">לידים מטא</th><th class="n" data-f="cpl">עלות לליד</th><th class="n" data-f="sheet_leads">לידים בגיליון</th><th class="n" data-f="meetings">פגישות</th></tr></thead>
       <tbody></tbody></table></div>
@@ -124,10 +151,10 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
     <p>בלי המידע הזה, ההחלטות על התקציב (איזו מודעה, איזו פלטפורמה, כמה להשקיע) מתקבלות על תמונה חלקית. <b>הבקשה שלנו:</b> לעדכן את עמודת "סטטוס" בכל ליד אחרי כל שינוי - ענה / נקבעה פגישה / הגיע לפגישה / נסגר כלקוח / לא רלוונטי. שתי דקות ביום, והדוח יתחיל להראות את ההחזר האמיתי של הקמפיין.</p>
   </div>
   <div class="tiles">
-    <div class="tile"><div class="lbl">לידים בגיליון</div><div class="val" data-k="f.sheet_leads">—</div><div class="hint">מתוכם כפולים: <span data-k="f.dups">—</span></div></div>
-    <div class="tile"><div class="lbl">פגישות שתועדו</div><div class="val" data-k="f.meetings">—</div></div>
-    <div class="tile"><div class="lbl">שיעור קביעת פגישה</div><div class="val" data-k="f.meeting_rate">—</div><div class="hint">מכלל הלידים בגיליון</div></div>
-    <div class="tile"><div class="lbl">עלות לפגישה</div><div class="val" data-k="f.cost_per_meeting">—</div><div class="hint">לכל היותר</div></div>
+    <div class="tile"><div class="lbl">לידים בגיליון</div><div class="val" data-k="f.sheet_leads">—</div><div class="hint">מתוכם כפולים: <span data-k="f.dups">—</span></div><div class="delta" data-d="sheet_leads"></div></div>
+    <div class="tile"><div class="lbl">פגישות שתועדו</div><div class="val" data-k="f.meetings">—</div><div class="delta" data-d="meetings"></div></div>
+    <div class="tile"><div class="lbl">שיעור קביעת פגישה</div><div class="val" data-k="f.meeting_rate">—</div><div class="hint">מכלל הלידים בגיליון</div><div class="delta" data-d="meeting_rate"></div></div>
+    <div class="tile"><div class="lbl">עלות לפגישה</div><div class="val" data-k="f.cost_per_meeting">—</div><div class="hint">לכל היותר</div><div class="delta" data-d="cost_per_meeting"></div></div>
     <div class="tile"><div class="lbl">עדיין בתהליך</div><div class="val" data-k="f.in_progress">—</div><div class="hint">שיחה רלוונטית / ביקשו שיחזרו</div></div>
     <div class="tile"><div class="lbl">אין מענה (בתיעוד)</div><div class="val" data-k="f.noanswer">—</div></div>
   </div>
@@ -155,15 +182,15 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
     <h3>מה הנתונים אומרים</h3>
     <ol id="insights-list">
       <li><b>הקמפיין מספק נפח יציב.</b> מטא דיווחה על <span class="num" data-k="t.leads">—</span> לידים והגיליון מתעד <span class="num" data-k="f.sheet_leads">—</span> - כמעט אחד לאחד, כלומר הלידים עוברים מהטופס לגיליון בלי איבוד.</li>
-      <li><b>מהירות החזרה ללידים היא המנוף הזול ביותר.</b> <span class="num" data-k="f.noanswer">—</span> לידים (<span class="num" data-k="f.noanswer_share">—</span>) מסומנים "אין מענה" בהערה האחרונה - חלקם כנראה נענו בהמשך ולא עודכנו, אבל גם כך זה הסטטוס הנפוץ ביותר. לפי תאריכי ההערות, השיחה הראשונה מתבצעת בדרך כלל למחרת או יומיים אחרי השארת הפרטים. בתחום חובות והוצאה לפועל, פונה שלא קיבל מענה באותו יום ממשיך לחפש - ולכן חזרה תוך שעה, ניסיון שני באותו יום והודעת וואטסאפ אוטומטית הם הדרך הזולה ביותר להעלות את מספר הפגישות בלי להגדיל תקציב.</li>
+      <li><b>מהירות החזרה ללידים היא המנוף הזול ביותר.</b> <span class="num" data-k="f.noanswer">—</span> לידים (<span class="num" data-k="f.noanswer_share">—</span>) מסומנים "אין מענה" בהערה האחרונה - חלקם כנראה נענו בהמשך ולא עודכנו, אבל גם כך זה אחד הסטטוסים הנפוצים. לפי תאריכי ההערות, השיחה הראשונה מתבצעת בדרך כלל למחרת או יומיים אחרי השארת הפרטים. בתחום חובות והוצאה לפועל, פונה שלא קיבל מענה באותו יום ממשיך לחפש - ולכן חזרה תוך שעה, ניסיון שני באותו יום והודעת וואטסאפ אוטומטית הם הדרך הזולה ביותר להעלות את מספר הפגישות בלי להגדיל תקציב.</li>
       <li><b>כשמגיעים ללקוח, ההמרה טובה.</b> <span class="num" data-k="f.meetings">—</span> פגישות תועדו ועוד <span class="num" data-k="f.in_progress">—</span> לידים נמצאים בשיחה פעילה או ביקשו שיחזרו אליהם. מתוך מי שהצליחו לדבר איתו, <span class="num" data-k="f.meeting_rate_reached">—</span> הגיעו לקביעת פגישה.</li>
       <li id="ins-source"><b>פייסבוק מול אינסטגרם.</b> שיעור קביעת פגישה בפייסבוק <span class="num" data-k="s.Facebook">—</span> מול <span class="num" data-k="s.Instagram">—</span> באינסטגרם. <span id="ins-source-verdict"></span></li>
       <li id="ins-ads"><b>השוואת המודעות.</b> <span id="ins-ads-text"></span></li>
-      <li><b>בקשה לצוות:</b> עמודות "האם טופל?" ו"סטטוס" בגיליון ריקות מאז ספטמבר, והסיווג בדוח נעשה מתוך הערת השיחה הראשונה בלבד. עדכון הסטטוס אחרי כל שינוי (ראו ההסבר בתחילת הסקשן) יאפשר לנו למדוד פגישות שהתקיימו ולקוחות שנסגרו - ולהעביר תקציב למה שבאמת מביא לקוחות.</li>
+      <li><b>בקשה לצוות:</b> עמודות "האם טופל?" ו"סטטוס" בגיליון ריקות מאז ספטמבר, והסיווג בדוח נעשה מתוך הערת השיחה האחרונה בלבד. עדכון הסטטוס אחרי כל שינוי (ראו ההסבר בתחילת הסקשן) יאפשר לנו למדוד פגישות שהתקיימו ולקוחות שנסגרו - ולהעביר תקציב למה שבאמת מביא לקוחות.</li>
     </ol>
   </div>
 
-  <p class="defs"><b>הגדרות:</b> CTR = אחוז הקליקים מתוך החשיפות. CPC = עלות לקליק. CPM = עלות לאלף חשיפות. עלות לליד = הוצאה ÷ לידים במטא. עלות לפגישה = הוצאה ÷ פגישות שתועדו בגיליון. "שיחה רלוונטית - בתהליך" = דיברו עם הפונה, הוא רלוונטי אבל טרם נקבעה פגישה. "טרם תועד" = לידים מהימים האחרונים שעוד אין עליהם הערה.</p>
+  <p class="defs"><b>הגדרות:</b> CTR = אחוז הקליקים מתוך החשיפות. CPC = עלות לקליק. CPM = עלות לאלף חשיפות. עלות לליד = הוצאה ÷ לידים במטא. עלות לפגישה = הוצאה ÷ פגישות שתועדו בגיליון. "שיחה רלוונטית - בתהליך" = דיברו עם הפונה, הוא רלוונטי אבל טרם נקבעה פגישה. "טרם תועד" = לידים מהימים האחרונים שעוד אין עליהם הערה. <b>השוואה לחודש הקודם:</b> כשהחודש הנבחר עוד לא הסתיים, ההשוואה נעשית מול אותם ימים בחודש הקודם (למשל 1-19 מול 1-19), כדי שההשוואה תהיה הוגנת. ליד בגיליון משויך לחודש שבו השאיר את הפרטים.</p>
 
   <footer><span>הוכן על ידי IDEA DIGITAL</span><span>הדוח מתעדכן אוטומטית פעם בשבוע</span></footer>
 </div>
@@ -174,102 +201,215 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
   const ILS2 = (v) => '₪' + d3.format(',.2f')(v);
   const INT = d3.format(',');
   const PCT = d3.format('.1%');
-  const DASH = (f) => (v) => (v == null || Number.isNaN(v)) ? '—' : f(v);
+  const DASH = (f) => (v) => (v == null || Number.isNaN(v) || !Number.isFinite(v)) ? '—' : f(v);
   const parseDay = (s) => new Date(s + 'T00:00:00Z');
   const wk = (s) => d3.utcFormat('%Y-%m-%d')(d3.utcSunday.floor(parseDay(s)));
   const ddmm = d3.utcFormat('%d.%m');
+  const fmtFull = d3.utcFormat('%d.%m.%Y');
+  const MONTHS = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+  const monthName = (m) => MONTHS[+m.slice(5, 7) - 1];
+  const monthLabel = (m) => monthName(m) + ' ' + m.slice(0, 4);
   const FMT = {
-    spend: ILS, cost_per_lead: DASH(ILS2), cpc: DASH(ILS2), cpm: ILS2, cpl: DASH(ILS2), cost_per_meeting: DASH(ILS),
+    spend: ILS, cost_per_lead: DASH(ILS2), cpc: DASH(ILS2), cpm: DASH(ILS2), cpl: DASH(ILS2), cost_per_meeting: DASH(ILS),
     impressions: INT, reach: INT, clicks: INT, leads: INT, meetings: INT, sheet_leads: INT, noanswer: INT, dups: INT, in_progress: INT, meta_leads: INT,
-    frequency: d3.format('.2f'), ctr: (v) => v > 1 ? d3.format('.2f')(v) + '%' : PCT(v),
-    meeting_rate: DASH(PCT), noanswer_share: PCT, meeting_rate_reached: PCT,
+    frequency: d3.format('.2f'), ctr: (v) => v == null ? '—' : (v > 1 ? d3.format('.2f')(v) + '%' : PCT(v)),
+    meeting_rate: DASH(PCT), noanswer_share: DASH(PCT), meeting_rate_reached: DASH(PCT),
     week: (s) => 'מ-' + ddmm(parseDay(s)),
   };
   document.querySelectorAll('[data-k],.chart').forEach((e) => e.classList.add('skel'));
 
-  let meta, totals, ads, leads, info;
+  let meta, totals, ads, leads, info, monthly, adsMonthly;
   try {
     const bust = '?v=' + Date.now();
     const get = (p) => fetch('data/' + p + bust).then((r) => { if (!r.ok) throw new Error(p); return r.json(); });
-    [totals, meta, ads, leads, info] = await Promise.all([get('meta_totals.json'), get('meta_daily.json'), get('meta_ads.json'), get('leads.json'), get('info.json').catch(() => ({}))]);
+    [totals, meta, ads, leads, info, monthly, adsMonthly] = await Promise.all([get('meta_totals.json'), get('meta_daily.json'), get('meta_ads.json'), get('leads.json'), get('info.json').catch(() => ({})), get('meta_monthly.json').catch(() => []), get('meta_ads_monthly.json').catch(() => [])]);
   } catch (e) {
     document.getElementById('err').style.display = 'block';
     document.querySelectorAll('.skel').forEach((e) => e.classList.remove('skel'));
     return;
   }
-  const t = totals[0];
-  const days = meta.map((r) => r.day).sort();
-  const fmtFull = d3.utcFormat('%d.%m.%Y');
-  document.getElementById('period').textContent = fmtFull(parseDay(days[0])) + ' - ' + fmtFull(parseDay(days[days.length - 1]));
-  document.getElementById('updated').textContent = info.updated ? fmtFull(new Date(info.updated)) : fmtFull(parseDay(days[days.length - 1]));
+  const sortedAll = [...meta].sort((a, b) => d3.ascending(a.day, b.day));
+  const firstDay = sortedAll[0].day, lastDay = sortedAll[sortedAll.length - 1].day;
+  document.getElementById('updated').textContent = info.updated ? fmtFull(new Date(info.updated)) : fmtFull(parseDay(lastDay));
+  // 7-day rolling cost per lead, computed on the whole series so the first days of a month still have a value
+  const cpl7 = new Map(sortedAll.map((r, i) => {
+    const w = sortedAll.slice(Math.max(0, i - 6), i + 1); const l = d3.sum(w, (x) => x.leads);
+    return [r.day, i >= 6 && l ? d3.sum(w, (x) => x.spend) / l : null];
+  }));
 
-  // ---- calculations ----
-  const c = (k, rows = leads) => rows.filter((r) => r.outcome_code === k).length;
-  const n = leads.length, meetings = c('meeting'), noanswer = c('noanswer');
-  const reached = meetings + c('qualified') + c('callback') + c('notrel');
-  const f = {
-    sheet_leads: n, meetings, noanswer, dups: c('dup'), in_progress: c('qualified') + c('callback'),
-    meeting_rate: meetings / n, noanswer_share: noanswer / n, meeting_rate_reached: reached ? meetings / reached : null,
-    cost_per_meeting: meetings ? t.spend / meetings : null,
-  };
-  const group = (key) => d3.rollups(leads, (v) => {
-    const m = c('meeting', v);
-    return { leads: v.length, meetings: m, meeting_rate: m / v.length, noanswer: c('noanswer', v) };
-  }, (r) => r[key]).map(([k, o]) => ({ [key]: k, ...o })).sort((a, b) => b.leads - a.leads);
-  const bySource = group('source'), byDebt = group('debt_status');
-  const outcomes = d3.rollups(leads, (v) => ({ n: v.length, order: v[0].outcome_order }), (r) => r.outcome)
-    .map(([outcome, o]) => ({ outcome, n: o.n, share: o.n / n, order: o.order })).sort((a, b) => a.order - b.order);
-  const mW = d3.rollup(meta, (v) => ({ spend: d3.sum(v, (r) => r.spend), impressions: d3.sum(v, (r) => r.impressions), clicks: d3.sum(v, (r) => r.clicks), leads: d3.sum(v, (r) => r.leads) }), (r) => wk(r.day));
-  const sW = d3.rollup(leads, (v) => ({ n: v.length, meet: c('meeting', v) }), (r) => wk(r.day));
-  const weekly = [...mW.keys()].sort().map((week) => {
-    const a = mW.get(week), b = sW.get(week) || { n: 0, meet: 0 };
-    return { week, spend: a.spend, impressions: a.impressions, ctr: a.clicks / a.impressions, cpc: a.clicks ? a.spend / a.clicks : null, meta_leads: a.leads, cpl: a.leads ? a.spend / a.leads : null, sheet_leads: b.n, meetings: b.meet };
+  // ---- views: one per month (newest first) + whole period ----
+  const months = [...new Set(sortedAll.map((r) => r.day.slice(0, 7)))].sort();
+  const monthEnd = (m) => d3.utcFormat('%Y-%m-%d')(d3.utcDay.offset(d3.utcMonth.offset(parseDay(m + '-01'), 1), -1));
+  const views = [...months].reverse().map((m) => {
+    const days = sortedAll.filter((r) => r.day.startsWith(m)).map((r) => r.day);
+    const end = days[days.length - 1];
+    return { id: m, label: monthLabel(m), from: days[0], to: end, partial: end < monthEnd(m) && m === months[months.length - 1] };
   });
-  const sorted = [...meta].sort((a, b) => d3.ascending(a.day, b.day));
-  const daily = sorted.map((r, i) => {
-    const w = sorted.slice(Math.max(0, i - 6), i + 1); const l = d3.sum(w, (x) => x.leads);
-    return { day: r.day, spend: r.spend, leads: r.leads, cpl7: i >= 6 && l ? d3.sum(w, (x) => x.spend) / l : null };
-  });
-  const byAd = ads.map((a) => {
-    const mine = leads.filter((r) => r.ad === a.ad); const m = c('meeting', mine);
-    return { ad: a.ad, spend: a.spend, ctr: a.ctr / 100, meta_leads: a.leads, cost_per_lead: a.cost_per_lead, meetings: m, meeting_rate: mine.length ? m / mine.length : null, cost_per_meeting: m ? a.spend / m : null };
-  }).sort((a, b) => b.spend - a.spend);
+  views.push({ id: 'all', label: 'כל התקופה', from: firstDay, to: lastDay, partial: false });
 
-  // ---- fill numbers ----
-  const src = { t, f, s: Object.fromEntries(bySource.map((r) => [r.source, r.meeting_rate])) };
-  document.querySelectorAll('[data-k]').forEach((el) => {
-    const [g, k] = el.dataset.k.split('.');
-    const v = src[g][k];
-    el.textContent = v == null ? '—' : (g === 's' ? PCT(v) : (FMT[k] || String)(v));
-    el.classList.remove('skel');
+  const tabs = document.getElementById('tabs');
+  views.forEach((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.view = v.id;
+    b.textContent = v.label;
+    if (v.partial) { const s = document.createElement('small'); s.textContent = '(עד ' + ddmm(parseDay(v.to)) + ')'; b.append(s); }
+    b.addEventListener('click', () => { setView(v.id); history.replaceState(null, '', '#' + v.id); });
+    tabs.append(b);
   });
-  const fb = src.s.Facebook, ig = src.s.Instagram;
-  document.getElementById('ins-source-verdict').textContent = (fb == null || ig == null) ? '' :
-    Math.abs(fb - ig) < 0.03 ? 'ההבדל קטן - שתי הפלטפורמות ממירות בצורה דומה.' :
-    (fb > ig ? 'פייסבוק ממיר טוב יותר. אם המגמה תימשך, נשקול להעביר אליו חלק מהתקציב.' : 'אינסטגרם ממיר טוב יותר. אם המגמה תימשך, נשקול להעביר אליו חלק מהתקציב.');
-  const withM = byAd.filter((a) => a.cost_per_meeting != null);
-  let adText = 'אין עדיין מספיק פגישות מתועדות כדי להשוות בין המודעות.';
-  if (withM.length >= 2) {
-    const [a, b] = [...withM].sort((x, y) => x.cost_per_meeting - y.cost_per_meeting);
-    const gap = (b.cost_per_meeting - a.cost_per_meeting) / b.cost_per_meeting;
-    adText = `עלות לפגישה של ${ILS(a.cost_per_meeting)} במודעת "${a.ad}" מול ${ILS(b.cost_per_meeting)} במודעת "${b.ad}". ` +
-      (gap < 0.15 ? 'ההפרש קטן מכדי להכריע - הצעד הבא הוא להוסיף קריאייטיב חדש לבדיקה.' : `"${a.ad}" יעילה יותר - נשקול להעביר אליה תקציב.`);
+
+  const c = (k, rows) => rows.filter((r) => r.outcome_code === k).length;
+  const inRange = (from, to) => (r) => r.day >= from && r.day <= to;
+  // sums from the daily series + the sheet for any day range (used for fair month-over-month comparison)
+  function rangeStats(from, to) {
+    const d = sortedAll.filter(inRange(from, to)); const l = leads.filter(inRange(from, to));
+    const spend = d3.sum(d, (r) => r.spend), imp = d3.sum(d, (r) => r.impressions), clk = d3.sum(d, (r) => r.clicks), ml = d3.sum(d, (r) => r.leads);
+    const meet = c('meeting', l);
+    return { spend, leads: ml, cpl: ml ? spend / ml : null, ctr: imp ? clk / imp : null, cpc: clk ? spend / clk : null, cpm: imp ? spend / imp * 1000 : null,
+      sheet_leads: l.length, meetings: meet, meeting_rate: l.length ? meet / l.length : null, cost_per_meeting: meet ? spend / meet : null };
   }
-  document.getElementById('ins-ads-text').textContent = adText;
-
-  // ---- tables ----
-  const fillTable = (id, rows) => {
-    const tbl = document.getElementById(id);
-    const cols = [...tbl.querySelectorAll('th')].map((th) => th.dataset.f);
-    tbl.querySelector('tbody').replaceChildren(...rows.map((r) => {
-      const tr = document.createElement('tr');
-      cols.forEach((col, i) => { const td = document.createElement('td'); if (i) td.className = 'n'; const v = r[col]; td.textContent = FMT[col] ? FMT[col](v) : v; tr.append(td); });
-      return tr;
-    }));
+  const CMP_ROWS = [
+    ['spend', 'הוצאה', ILS2, 0], ['leads', 'לידים במטא', INT, 1], ['cpl', 'עלות לליד', DASH(ILS2), -1], ['ctr', 'CTR', DASH(PCT), 1],
+    ['cpc', 'CPC', DASH(ILS2), -1], ['cpm', 'CPM', DASH(ILS2), -1], ['sheet_leads', 'לידים בגיליון', INT, 1], ['meetings', 'פגישות שתועדו', INT, 1],
+    ['meeting_rate', 'שיעור קביעת פגישה', DASH(PCT), 1], ['cost_per_meeting', 'עלות לפגישה', DASH(ILS), -1],
+  ];
+  const deltaOf = (cur, prev, dir, isRate) => {
+    if (cur == null || prev == null || !Number.isFinite(cur) || !Number.isFinite(prev)) return null;
+    const diff = isRate ? cur - prev : (prev ? (cur - prev) / prev : null);
+    if (diff == null) return null;
+    const txt = (diff > 0 ? '▲ ' : diff < 0 ? '▼ ' : '') + (isRate ? d3.format('.1f')(Math.abs(diff) * 100) + ' נק׳' : d3.format('.0%')(Math.abs(diff)));
+    const cls = Math.abs(diff) < 0.005 || dir === 0 ? '' : ((diff > 0) === (dir > 0) ? 'up-good' : 'up-bad');
+    return { txt: diff === 0 ? 'ללא שינוי' : txt, cls };
   };
-  fillTable('weekly-table', weekly); fillTable('ads-table', byAd); fillTable('debt-table', byDebt); fillTable('source-table', bySource);
+
+  let view;
+  function setView(id) {
+    view = views.find((v) => v.id === id) || views[0];
+    tabs.querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.view === view.id)));
+    render();
+  }
+
+  function render() {
+    const V = view, isAll = V.id === 'all';
+    const mrow = isAll ? null : monthly.find((r) => r.month === V.id);
+    const t = isAll ? totals[0] : (mrow || (() => { // fallback if the monthly file is missing: derive from daily rows
+      const s = rangeStats(V.from, V.to); const d = sortedAll.filter(inRange(V.from, V.to));
+      return { spend: s.spend, leads: s.leads, cost_per_lead: s.cpl, impressions: d3.sum(d, (r) => r.impressions), reach: null, frequency: null, clicks: d3.sum(d, (r) => r.clicks), ctr: s.ctr * 100, cpc: s.cpc, cpm: s.cpm };
+    })());
+    const metaV = sortedAll.filter(inRange(V.from, V.to));
+    const leadsV = leads.filter(inRange(V.from, V.to));
+    const adsV = isAll ? ads : (adsMonthly.some((r) => r.month === V.id) ? adsMonthly.filter((r) => r.month === V.id) : []);
+
+    document.getElementById('period').textContent = fmtFull(parseDay(V.from)) + ' - ' + fmtFull(parseDay(V.to));
+    document.getElementById('take-when').textContent = isAll ? 'מתחילת הקמפיין' : (V.partial ? 'מתחילת ' + monthName(V.id) : 'ב' + monthName(V.id));
+
+    // ---- calculations ----
+    const n = leadsV.length, meetings = c('meeting', leadsV), noanswer = c('noanswer', leadsV);
+    const reached = meetings + c('qualified', leadsV) + c('callback', leadsV) + c('notrel', leadsV);
+    const f = {
+      sheet_leads: n, meetings, noanswer, dups: c('dup', leadsV), in_progress: c('qualified', leadsV) + c('callback', leadsV),
+      meeting_rate: n ? meetings / n : null, noanswer_share: n ? noanswer / n : null, meeting_rate_reached: reached ? meetings / reached : null,
+      cost_per_meeting: meetings ? t.spend / meetings : null,
+    };
+    const group = (key) => d3.rollups(leadsV, (v) => {
+      const m = c('meeting', v);
+      return { leads: v.length, meetings: m, meeting_rate: m / v.length, noanswer: c('noanswer', v) };
+    }, (r) => r[key]).map(([k, o]) => ({ [key]: k, ...o })).sort((a, b) => b.leads - a.leads);
+    const bySource = group('source'), byDebt = group('debt_status');
+    const outcomes = d3.rollups(leadsV, (v) => ({ n: v.length, order: v[0].outcome_order }), (r) => r.outcome)
+      .map(([outcome, o]) => ({ outcome, n: o.n, share: o.n / n, order: o.order })).sort((a, b) => a.order - b.order);
+    const mW = d3.rollup(metaV, (v) => ({ first: d3.min(v, (r) => r.day), spend: d3.sum(v, (r) => r.spend), impressions: d3.sum(v, (r) => r.impressions), clicks: d3.sum(v, (r) => r.clicks), leads: d3.sum(v, (r) => r.leads) }), (r) => wk(r.day));
+    const sW = d3.rollup(leadsV, (v) => ({ n: v.length, meet: c('meeting', v) }), (r) => wk(r.day));
+    const weekly = [...mW.keys()].sort().map((k) => {
+      const a = mW.get(k), b = sW.get(k) || { n: 0, meet: 0 };
+      return { week: a.first, spend: a.spend, impressions: a.impressions, ctr: a.impressions ? a.clicks / a.impressions : null, cpc: a.clicks ? a.spend / a.clicks : null, meta_leads: a.leads, cpl: a.leads ? a.spend / a.leads : null, sheet_leads: b.n, meetings: b.meet };
+    });
+    const daily = metaV.map((r) => ({ day: r.day, spend: r.spend, leads: r.leads, cpl7: cpl7.get(r.day) }));
+    const byAd = adsV.map((a) => {
+      const mine = leadsV.filter((r) => r.ad === a.ad); const m = c('meeting', mine);
+      return { ad: a.ad, spend: a.spend, ctr: a.ctr / 100, meta_leads: a.leads, cost_per_lead: a.cost_per_lead, meetings: m, meeting_rate: mine.length ? m / mine.length : null, cost_per_meeting: m ? a.spend / m : null };
+    }).sort((a, b) => b.spend - a.spend);
+
+    // ---- fill numbers ----
+    const src = { t, f, s: Object.fromEntries(bySource.map((r) => [r.source, r.meeting_rate])) };
+    document.querySelectorAll('[data-k]').forEach((el) => {
+      const [g, k] = el.dataset.k.split('.');
+      const v = src[g][k];
+      el.textContent = v == null ? '—' : (g === 's' ? PCT(v) : (FMT[k] || String)(v));
+      el.classList.remove('skel');
+    });
+    const fb = src.s.Facebook, ig = src.s.Instagram;
+    document.getElementById('ins-source-verdict').textContent = (fb == null || ig == null) ? '' :
+      Math.abs(fb - ig) < 0.03 ? 'ההבדל קטן - שתי הפלטפורמות ממירות בצורה דומה.' :
+      (fb > ig ? 'פייסבוק ממיר טוב יותר. אם המגמה תימשך, נשקול להעביר אליו חלק מהתקציב.' : 'אינסטגרם ממיר טוב יותר. אם המגמה תימשך, נשקול להעביר אליו חלק מהתקציב.');
+    const withM = byAd.filter((a) => a.cost_per_meeting != null);
+    let adText = 'אין עדיין מספיק פגישות מתועדות בתקופה הזו כדי להשוות בין המודעות.';
+    if (withM.length >= 2) {
+      const [a, b] = [...withM].sort((x, y) => x.cost_per_meeting - y.cost_per_meeting);
+      const gap = (b.cost_per_meeting - a.cost_per_meeting) / b.cost_per_meeting;
+      adText = `עלות לפגישה של ${ILS(a.cost_per_meeting)} במודעת "${a.ad}" מול ${ILS(b.cost_per_meeting)} במודעת "${b.ad}". ` +
+        (gap < 0.15 ? 'ההפרש קטן מכדי להכריע - הצעד הבא הוא להוסיף קריאייטיב חדש לבדיקה.' : `"${a.ad}" יעילה יותר - נשקול להעביר אליה תקציב.`);
+    }
+    document.getElementById('ins-ads-text').textContent = adText;
+
+    // ---- month-over-month comparison ----
+    const card = document.getElementById('cmp-card');
+    const idx = months.indexOf(V.id);
+    document.querySelectorAll('[data-d]').forEach((el) => { el.textContent = ''; el.className = 'delta'; });
+    document.getElementById('take-cmp').textContent = '';
+    if (isAll || idx < 1) { card.hidden = true; }
+    else {
+      const P = months[idx - 1];
+      const pFirst = sortedAll.find((r) => r.day.startsWith(P)).day;
+      const dayNo = +V.to.slice(8, 10);
+      const pTo = V.partial ? d3.min([P + '-' + String(dayNo).padStart(2, '0'), monthEnd(P)]) : monthEnd(P);
+      const cur = rangeStats(V.from, V.to), prev = rangeStats(pFirst, pTo);
+      const sameDays = V.partial;
+      const prevShort = monthName(P) + (sameDays ? ' (' + ddmm(parseDay(pFirst)) + '-' + ddmm(parseDay(pTo)) + ')' : '');
+      document.getElementById('cmp-title').textContent = 'השוואה ל' + monthName(P);
+      document.getElementById('cmp-note').textContent = sameDays
+        ? `${monthName(V.id)} עדיין לא הסתיים, ולכן משווים את ${ddmm(parseDay(V.from))}-${ddmm(parseDay(V.to))} מול אותם ימים ב${monthName(P)}. ירוק = שיפור, אדום = הרעה.`
+        : `${monthLabel(V.id)} מול ${monthLabel(P)}, חודש מלא מול חודש מלא. ירוק = שיפור, אדום = הרעה.`;
+      document.getElementById('cmp-h-cur').textContent = monthName(V.id) + (sameDays ? ' (' + ddmm(parseDay(V.from)) + '-' + ddmm(parseDay(V.to)) + ')' : '');
+      document.getElementById('cmp-h-prev').textContent = prevShort;
+      const rateKeys = new Set(['ctr', 'meeting_rate']);
+      document.querySelector('#cmp-table tbody').replaceChildren(...CMP_ROWS.map(([k, name, fm, dir]) => {
+        const tr = document.createElement('tr');
+        const d = deltaOf(cur[k], prev[k], dir, rateKeys.has(k));
+        [name, fm(cur[k]), fm(prev[k]), d ? d.txt : '—'].forEach((txt, i) => {
+          const td = document.createElement('td'); td.textContent = txt; if (i) td.className = 'n'; if (i === 3 && d && d.cls) td.classList.add(d.cls); tr.append(td);
+        });
+        return tr;
+      }));
+      card.hidden = false;
+      const tileMap = { spend: 'spend', leads: 'leads', cpl: 'cpl', ctr: 'ctr', cpc: 'cpc', sheet_leads: 'sheet_leads', meetings: 'meetings', meeting_rate: 'meeting_rate', cost_per_meeting: 'cost_per_meeting' };
+      document.querySelectorAll('[data-d]').forEach((el) => {
+        const k = tileMap[el.dataset.d]; const row = CMP_ROWS.find((r) => r[0] === k); if (!row) return;
+        const d = deltaOf(cur[k], prev[k], row[3], rateKeys.has(k));
+        if (d) { el.textContent = d.txt + ' מול ' + prevShort; if (d.cls) el.classList.add(d.cls); }
+      });
+      const dl = deltaOf(cur.cpl, prev.cpl, -1, false);
+      if (dl && cur.cpl != null && prev.cpl != null) {
+        document.getElementById('take-cmp').textContent = `העלות לליד ${cur.cpl < prev.cpl ? 'ירדה' : (cur.cpl > prev.cpl ? 'עלתה' : 'נשארה')} ${cur.cpl === prev.cpl ? 'זהה' : 'ב-' + d3.format('.0%')(Math.abs(cur.cpl - prev.cpl) / prev.cpl)} לעומת ${sameDays ? 'אותם ימים ב' + monthName(P) : monthName(P)}. `;
+      }
+    }
+
+    // ---- tables ----
+    const fillTable = (id, rows) => {
+      const tbl = document.getElementById(id);
+      const cols = [...tbl.querySelectorAll('th')].map((th) => th.dataset.f);
+      tbl.querySelector('tbody').replaceChildren(...rows.map((r) => {
+        const tr = document.createElement('tr');
+        cols.forEach((col, i) => { const td = document.createElement('td'); if (i) td.className = 'n'; const v = r[col]; td.textContent = FMT[col] ? FMT[col](v) : v; tr.append(td); });
+        return tr;
+      }));
+    };
+    fillTable('weekly-table', weekly); fillTable('ads-table', byAd); fillTable('debt-table', byDebt); fillTable('source-table', bySource);
+    state = { weekly, daily, outcomes, n };
+    draw();
+  }
 
   // ---- charts ----
+  let state;
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   const styleAxis = (g) => { g.attr('font-size', null).attr('font-family', null); g.selectAll('text').attr('fill', css('--muted')).style('font-size', '11px'); g.selectAll('.domain').attr('stroke', css('--line')); g.selectAll('.tick line').attr('stroke', css('--grid')); };
   const tipFor = (box) => {
@@ -285,6 +425,7 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
     };
   };
   function weeklyChart() {
+    const weekly = state.weekly;
     const box = document.getElementById('weekly-chart'); box.querySelector('svg')?.remove();
     const W = box.clientWidth, H = 240, m = { t: 10, r: 8, b: 26, l: 30 };
     const keys = ['meta_leads', 'sheet_leads', 'meetings'], names = ['לידים במטא', 'לידים בגיליון', 'פגישות'], cols = [css('--accent'), css('--c1'), css('--c2')];
@@ -301,10 +442,11 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
       .on('mousemove', (ev, o) => tip.show(ev, [['שבוע ' + FMT.week(o.r.week)], ...keys.map((k, i) => [names[i], o.r[k]])])).on('mouseleave', tip.hide);
   }
   function dailyChart() {
+    const daily = state.daily;
     const box = document.getElementById('daily-chart'); box.querySelector('svg')?.remove();
     const W = box.clientWidth, H = 240, m = { t: 10, r: 44, b: 26, l: 44 };
     const x = d3.scaleBand(daily.map((r) => r.day), [m.l, W - m.r]).padding(0.25);
-    const y = d3.scaleLinear([0, d3.max(daily, (r) => r.spend) * 1.1], [H - m.b, m.t]).nice();
+    const y = d3.scaleLinear([0, d3.max(daily, (r) => r.spend) * 1.1 || 1], [H - m.b, m.t]).nice();
     const y2 = d3.scaleLinear([0, d3.max(daily, (r) => r.cpl7 || 0) * 1.15 || 1], [H - m.b, m.t]).nice();
     const svg = d3.select(box).insert('svg', ':first-child').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
     svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickFormat((v) => '₪' + v).tickSize(-(W - m.l - m.r))).call(styleAxis).call((g) => g.select('.domain').remove());
@@ -318,7 +460,9 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
       .attr('fill', 'none').attr('stroke', css('--accent')).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('pointer-events', 'none');
   }
   function outcomeChart() {
+    const { outcomes } = state;
     const box = document.getElementById('outcome-chart'); box.replaceChildren();
+    if (!outcomes.length) { box.textContent = 'אין עדיין לידים בתקופה הזו.'; return; }
     const max = d3.max(outcomes, (r) => r.n);
     const wrap = document.createElement('div');
     wrap.style.cssText = 'display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center;font-size:13px';
@@ -332,8 +476,11 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
     });
     box.append(wrap);
   }
-  const draw = () => { document.querySelectorAll('.chart').forEach((e) => e.classList.remove('skel')); weeklyChart(); dailyChart(); outcomeChart(); };
-  draw();
+  function draw() { if (!state) return; document.querySelectorAll('.chart').forEach((e) => e.classList.remove('skel')); weeklyChart(); dailyChart(); outcomeChart(); }
+
+  const fromHash = decodeURIComponent(location.hash.slice(1));
+  setView(views.some((v) => v.id === fromHash) ? fromHash : views[0].id); // default: the current (latest) month
+  window.addEventListener('hashchange', () => { const h = decodeURIComponent(location.hash.slice(1)); if (views.some((v) => v.id === h) && h !== view.id) setView(h); });
   let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 150); });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', draw);
 })();
