@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>דוח קמפיין - משרד עו"ד הרשמן כץ</title>
+<title>דוח קמפיין - משרד עו"ד אברהם הרשמן</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Frank+Ruhl+Libre:wght@400;500&display=swap" rel="stylesheet">
@@ -68,6 +68,19 @@ td.n,th.n{text-align:left;direction:ltr}
 footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .skel{color:transparent!important;background:linear-gradient(90deg,var(--grid),var(--line),var(--grid));background-size:200% 100%;border-radius:6px;animation:sk 1.4s infinite}
 @keyframes sk{to{background-position:-200% 0}}
+.adgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,19rem),1fr));gap:12px;margin-top:12px}
+.adcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.adcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.adcard h4{margin:0;font-size:15px;font-weight:500;line-height:1.4}
+.adcard .badge{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--c2);white-space:nowrap}
+.adcard .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px;color:var(--muted)}
+.adcard .stats b{display:block;font-size:16px;font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.adframe{position:relative;width:100%;max-width:340px;margin-inline:auto;border-radius:10px;overflow:hidden;background:var(--grid)}
+.adframe iframe{display:block;width:100%;height:100%;border:0}
+.adframe.video{aspect-ratio:9/16;max-height:600px}
+.adframe.post{height:620px}
+.adcard .open{font-size:12.5px;color:var(--accent);text-decoration:none;align-self:center}
+.adcard .open:hover{text-decoration:underline}
 .err{display:none;background:var(--panel);border:1px solid var(--bad);color:var(--bad);border-radius:12px;padding:14px;margin-top:16px}
 </style>
 </head>
@@ -75,7 +88,7 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
 <div class="wrap">
   <header>
     <div class="brand">IDEA DIGITAL · דוח ביצועים</div>
-    <h1>דוח קמפיין לידים - משרד עו"ד אברהם הרשמן כץ</h1>
+    <h1>דוח קמפיין לידים - משרד עו"ד אברהם הרשמן</h1>
     <p class="sub">תקופה: <span id="period">—</span> · קמפיין לידים במטא (פייסבוק + אינסטגרם) · עודכן לאחרונה: <span id="updated">—</span></p>
     <p class="take">
       <span id="take-when">—</span> הקמפיין הביא <span class="num" data-k="t.leads">—</span> לידים בעלות ממוצעת של <span class="num" data-k="t.cost_per_lead">—</span> לליד. לפי התיעוד של המשרד, <span class="num" data-k="f.meetings">—</span> מהם תועדו כפגישה שנקבעה - עלות של <span class="num" data-k="f.cost_per_meeting">—</span> לפגישה לכל היותר. <span id="take-cmp"></span>בגלל שהגיליון לא מתעדכן אחרי השיחה הראשונה, המספרים בפועל כנראה טובים יותר - ועדכון הגיליון הוא הצעד הראשון כדי למדוד את ההחזר האמיתי.
@@ -136,6 +149,12 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
     <div class="tw"><table id="ads-table">
       <thead><tr><th data-f="ad">מודעה</th><th class="n" data-f="spend">הוצאה</th><th class="n" data-f="ctr">CTR</th><th class="n" data-f="meta_leads">לידים מטא</th><th class="n" data-f="cost_per_lead">עלות לליד</th><th class="n" data-f="meetings">פגישות</th><th class="n" data-f="meeting_rate">% פגישה</th><th class="n" data-f="cost_per_meeting">עלות לפגישה</th></tr></thead>
       <tbody></tbody></table></div>
+  </div>
+
+  <div class="card" id="ads-preview" style="margin-top:12px">
+    <h3>המודעות הפעילות</h3>
+    <p class="note">כך המודעות נראות בפיד. אפשר להפעיל את הסרטון ישירות מכאן. המספרים בכל כרטיס הם לתקופה שנבחרה למעלה.</p>
+    <div class="adgrid" id="ad-cards"></div>
   </div>
 
   <h2 id="leads">2. מה קרה ללידים - לפי תיעוד המשרד</h2>
@@ -218,11 +237,11 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
   };
   document.querySelectorAll('[data-k],.chart').forEach((e) => e.classList.add('skel'));
 
-  let meta, totals, ads, leads, info, monthly, adsMonthly;
+  let meta, totals, ads, leads, info, monthly, adsMonthly, creatives;
   try {
     const bust = '?v=' + Date.now();
     const get = (p) => fetch('data/' + p + bust).then((r) => { if (!r.ok) throw new Error(p); return r.json(); });
-    [totals, meta, ads, leads, info, monthly, adsMonthly] = await Promise.all([get('meta_totals.json'), get('meta_daily.json'), get('meta_ads.json'), get('leads.json'), get('info.json').catch(() => ({})), get('meta_monthly.json').catch(() => []), get('meta_ads_monthly.json').catch(() => [])]);
+    [totals, meta, ads, leads, info, monthly, adsMonthly, creatives] = await Promise.all([get('meta_totals.json'), get('meta_daily.json'), get('meta_ads.json'), get('leads.json'), get('info.json').catch(() => ({})), get('meta_monthly.json').catch(() => []), get('meta_ads_monthly.json').catch(() => []), get('meta_creatives.json').catch(() => [])]);
   } catch (e) {
     document.getElementById('err').style.display = 'block';
     document.querySelectorAll('.skel').forEach((e) => e.classList.remove('skel'));
@@ -403,9 +422,46 @@ footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:v
         return tr;
       }));
     };
+    renderAdCards(byAd);
     fillTable('weekly-table', weekly); fillTable('ads-table', byAd); fillTable('debt-table', byDebt); fillTable('source-table', bySource);
     state = { weekly, daily, outcomes, n };
     draw();
+  }
+
+  // ---- active ad previews (official Facebook embeds, loaded lazily) ----
+  let adCardsBuilt = false;
+  function renderAdCards(byAd) {
+    const wrap = document.getElementById('ad-cards');
+    const list = (creatives || []).filter((c) => c.status === 'ACTIVE');
+    if (!list.length) { document.getElementById('ads-preview').hidden = true; return; }
+    if (!adCardsBuilt) {
+      adCardsBuilt = true;
+      list.forEach((c) => {
+        const card = document.createElement('div'); card.className = 'adcard'; card.dataset.ad = c.ad;
+        const top = document.createElement('div'); top.className = 'top';
+        const h = document.createElement('h4'); h.textContent = c.ad;
+        const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = c.format === 'video' ? 'סרטון · פעילה' : 'פעילה';
+        top.append(h, badge);
+        const stats = document.createElement('div'); stats.className = 'stats';
+        const frame = document.createElement('div'); frame.className = 'adframe ' + (c.format === 'video' ? 'video' : 'post');
+        const ifr = document.createElement('iframe');
+        ifr.loading = 'lazy'; ifr.title = 'תצוגה מקדימה: ' + c.ad;
+        ifr.allow = 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share'; ifr.allowFullscreen = true;
+        ifr.referrerPolicy = 'strict-origin-when-cross-origin';
+        ifr.src = c.format === 'video'
+          ? 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(c.video_url) + '&show_text=false&width=340'
+          : 'https://www.facebook.com/plugins/post.php?href=' + encodeURIComponent(c.post_url) + '&show_text=true&width=340';
+        frame.append(ifr);
+        const a = document.createElement('a'); a.className = 'open'; a.href = c.post_url; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = 'פתיחת המודעה בפייסבוק ↗';
+        card.append(top, stats, frame, a); wrap.append(card);
+      });
+    }
+    wrap.querySelectorAll('.adcard').forEach((card) => {
+      const r = byAd.find((x) => x.ad === card.dataset.ad);
+      const cells = [['הוצאה', r ? ILS(r.spend) : '—'], ['לידים', r ? INT(r.meta_leads) : '—'], ['עלות לליד', r ? FMT.cost_per_lead(r.cost_per_lead) : '—']];
+      card.querySelector('.stats').replaceChildren(...cells.map(([k, v]) => { const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; d.append(k, b); return d; }));
+    });
   }
 
   // ---- charts ----
